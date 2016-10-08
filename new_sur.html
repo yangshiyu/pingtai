@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新问卷</title>
+    <link href="top.css" rel="stylesheet" />
+    <link href="new_sur.css" rel="stylesheet" />
+</head>
+<body>
+<div class="top">
+    <ul>
+        <li class="top1">问卷管理</li>
+        <li class="top2" id="top2"><a href="index.html">我的问卷</a></li>
+    </ul>
+</div>
+<form class="mid" onsubmit="return false;">
+    <input type="text" class="mid1" id="title" value="请输入标题"/>
+    <div class="mid2" ></div>
+    <div class="question" id="question"></div>
+    <div id="question_type" class="mid3">
+        <div class="mid31">单选</div>
+        <div>多选</div>
+        <div>文本</div>
+    </div>
+    <div class="mid4" id="addQuestion"><img src="img/add.jpg" />添加问题</div>
+    <div class="mid2"></div>
+    <div class="mid5">
+        <div class="mid51">问卷截止日期<input type="text" id="kalendar" /></div>
+        <button class="btn1" id="btn1">发布问卷</button>
+        <button class="btn2" id="btn2">保存问卷</button>
+    </div>
+</form>
+<div id="coverall"></div>
+<div class="cover" id="radio_cover">
+    <p class="cover_p">新建单选题</p>
+    <p class="hint">分别在下面的框中填写问题的名称以及选项，选项用逗号英文‘,’分隔开。</p>
+    <span>请输入标题题目</span><input type="text" id="Ques1"/><br>
+    <span>请输入选项</span><input type="text" id="option1"/>
+    <button class="yes">确定</button><button class="no">取消</button>
+</div>
+<div class="cover" id="checkbox_cover">
+    <p class="cover_p">新建多选题</p>
+    <p class="hint">分别在下面的框中填写问题的名称以及选项，选项用英文逗号‘,’分隔开。</p>
+    <span>请输入标题题目</span><input type="text" id="Ques2"/><br>
+    <span>请输入选项</span><input type="text" id="option2"/>
+    <button class="yes">确定</button><button class="no">取消</button>
+</div>
+<div class="text_cover" id="text_cover">
+    <p class="cover_p">新建文本</p>
+    <span>请输入标题题目</span><input type="text" id="Ques3"/>
+    <button class="yes">确定</button><button class="no">取消</button>
+</div>
+</body>
+<script src="function.js" type="text/javascript"></script>
+<script src="My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<script>
+    addEvent($("title"),"mouseover",function () {
+        $("title").style.backgroundColor="antiquewhite";
+    });
+    addEvent($("title"),"mouseout",function () {
+        $("title").style.backgroundColor="#ffffff";
+    });
+    function select_all(ev) {
+        var Event=ev||event;
+        var target=Event.target||Event.srcElement;
+        target.select();
+    }
+    addEvent($("title"),"click",select_all);
+    addEvent($("addQuestion"),"click",function() {
+        //$("question_type").style.display="block";
+        $("question_type").style.borderColor="#cccccc";
+        startmove($("question_type"),"height",82,function(){
+            var aDiv=$("question_type").getElementsByTagName("div");
+            for(var i=0;i<aDiv.length;i++){
+                aDiv[i].style.display="block";
+            }
+        });
+    });
+    var num=0;
+    addEvent($("question_type"),"click",function (ev) {
+        var Event=ev||event;
+        var target=Event.target||Event.srcElement;
+        switch (target.innerHTML){
+            case "单选":
+                num++;
+                show("radio_cover");
+                var radio_yes_btn=$("radio_cover").getElementsByClassName("yes")[0];
+                var radio_no_btn=$("radio_cover").getElementsByClassName("no")[0];
+                addEvent(radio_yes_btn,"click",show_radio_question);
+                addEvent(radio_no_btn,"click",back_radio);
+                break;
+            case "多选":
+                num++;
+                show("checkbox_cover");
+                var checkbox_yes_btn=$("checkbox_cover").getElementsByClassName("yes")[0];
+                var checkbox_no_btn=$("checkbox_cover").getElementsByClassName("no")[0];
+                addEvent(checkbox_yes_btn,"click",show_checkbox_question);
+                addEvent(checkbox_no_btn,"click",back_checkbox);
+                break;
+            case "文本":
+                num++;
+                show("text_cover");
+                var text_yes_btn=$("text_cover").getElementsByClassName("yes")[0];
+                var text_no_btn=$("text_cover").getElementsByClassName("no")[0];
+                addEvent(text_yes_btn,"click",show_text_question);
+                addEvent(text_no_btn,"click",back_text);
+                break;
+            default:
+                break;
+        }
+    });
+    addEvent($("kalendar"),"click",WdatePicker);//日历
+
+    function show(id){//显示遮罩
+        $("coverall").style.display="block";
+        $("coverall").style.top=document.body.scrollTop+'px';
+        $(id).style.display="block";
+        $(id).style.top=document.documentElement.clientHeight/2+document.body.scrollTop+'px';
+    }
+    function back_radio() {//隐藏遮罩
+        $("coverall").style.display="none";
+        $("radio_cover").style.display="none";
+    }
+    function back_checkbox() {//隐藏遮罩
+        $("coverall").style.display="none";
+        $("checkbox_cover").style.display="none";
+    }
+    function back_text() {//隐藏遮罩
+        $("coverall").style.display="none";
+        $("text_cover").style.display="none";
+    }
+    function show_radio_question() {
+        back_radio();
+        var title=$("Ques1").value;
+        var opt_arr=$("option1").value.split(',');
+        if($("question").innerHTML=="")
+                num=1;
+        var id="question"+num;
+        var div=document.createElement("div");
+        div.id=id;
+        div.className="ques";
+        var span=document.createElement("span");
+        var text="Q"+num+title+"（单选题）";
+        span.appendChild(document.createTextNode(text));
+        var input1=document.createElement("input");
+        input1.type="checkbox";
+        input1.id="necessary";
+        var label1=document.createElement("label");
+        label1.appendChild(document.createTextNode("此题是否必选"));
+        var br=document.createElement("br");
+        var fragment=document.createDocumentFragment();
+        for(var i=0;i<opt_arr.length;i++){
+            var input2=document.createElement("input");
+            input2.type="radio";
+            input2.id="opt"+i;
+            input2.name="radio";
+            var label2=document.createElement("label");
+            label2.appendChild(document.createTextNode(opt_arr[i]));
+            var br=document.createElement("br");
+            fragment.appendChild(input2);
+            fragment.appendChild(label2);
+            fragment.appendChild(br);
+        }
+        var p=document.createElement("p");
+        p.className="del";
+        p.appendChild(document.createTextNode("删除"));
+        div.appendChild(span);
+        div.appendChild(input1);
+        div.appendChild(label1);
+        div.appendChild(br);
+        div.appendChild(fragment);
+        div.appendChild(p);
+        $("question").appendChild(div);
+        /*text1+="<div id='"+id+"' class='ques'><span>Q"+num+"&nbsp;&nbsp;"+title+"（单选题）</span>
+        <input type='checkbox' id='necessary'/>" +"<label for='necessary'>此题是否必选</label><br>";
+        for(var i=0;i<opt_arr.length;i++){
+            text1+="<input type='radio' id='opt"+i+"' name='radio'/><label for='opt"+i+"'>"+opt_arr[i]+"</label><br>";
+        }
+        text1+="<p class='del'>删除</p></div>";*/
+        //$("question").innerHTML=text;
+        addEvent(p,"click",function() {//给每个p添加删除事件
+            var div=this.parentNode;
+            $("question").removeChild(div);
+        });
+    }
+    function show_checkbox_question() {
+        back_checkbox();
+        var title=$("Ques2").value;
+        var opt_arr=$("option2").value.split(',');
+        if($("question").innerHTML=="")
+            num=1;
+        var id="question"+num;
+        var div=document.createElement("div");
+        div.id=id;
+        div.className="ques";
+        var span=document.createElement("span");
+        var text="Q"+num+title+"（多选题）";
+        span.appendChild(document.createTextNode(text));
+        var input1=document.createElement("input");
+        input1.type="checkbox";
+        input1.id="necessary";
+        var label1=document.createElement("label");
+        label1.appendChild(document.createTextNode("此题是否必选"));
+        var br=document.createElement("br");
+        var fragment=document.createDocumentFragment();
+        for(var i=0;i<opt_arr.length;i++){
+            var input2=document.createElement("input");
+            input2.type="checkbox";
+            input2.id="opt"+i;
+            var label2=document.createElement("label");
+            label2.appendChild(document.createTextNode(opt_arr[i]));
+            var br=document.createElement("br");
+            fragment.appendChild(input2);
+            fragment.appendChild(label2);
+            fragment.appendChild(br);
+        }
+        var p=document.createElement("p");
+        p.className="del";
+        p.appendChild(document.createTextNode("删除"));
+        div.appendChild(span);
+        div.appendChild(input1);
+        div.appendChild(label1);
+        div.appendChild(br);
+        div.appendChild(fragment);
+        div.appendChild(p);
+        $("question").appendChild(div);
+        addEvent(p,"click",function() {//给每个p添加删除事件
+            var div=this.parentNode;
+            $("question").removeChild(div);
+        });
+    }
+    function show_text_question(){
+        back_text();
+        var title=$("Ques3").value;
+        if($("question").innerHTML=="")
+            num=1;
+        var id="question"+num;
+        var div=document.createElement("div");
+        div.id=id;
+        div.className="ques";
+        var span=document.createElement("span");
+        var text="Q"+num+title+"（文本题）";
+        span.appendChild(document.createTextNode(text));
+        var input1=document.createElement("input");
+        input1.type="checkbox";
+        input1.id="necessary";
+        var label1=document.createElement("label");
+        label1.appendChild(document.createTextNode("此题是否必选"));
+        var br=document.createElement("br");
+        var textarea=document.createElement("textarea");
+        textarea.cols=100;
+        textarea.rows=5;
+        var p=document.createElement("p");
+        p.className="del";
+        p.appendChild(document.createTextNode("删除"));
+        div.appendChild(span);
+        div.appendChild(input1);
+        div.appendChild(label1);
+        div.appendChild(br);
+        div.appendChild(textarea);
+        div.appendChild(p);
+        $("question").appendChild(div);
+        addEvent(p,"click",function() {//给每个p添加删除事件
+            var div=this.parentNode;
+            $("question").removeChild(div);
+        });
+    }
+    var storage=getLocalStorage();//创建localstorage
+    addEvent($("btn2"),"click",function() {//保存问卷
+        storage.setItem("title",$("title").value);
+        var ques_arr = [];
+        var option_arr = {};
+        var aDiv = $("question").getElementsByClassName("ques");
+        for (var i = 0; i < aDiv.length; i++) {
+            var content = [];
+            ques_arr.push(aDiv[i].getElementsByTagName("span")[0].innerHTML);
+            var aLabel = aDiv[i].getElementsByTagName("label");
+            for (var j = 1; j < aLabel.length; j++) {
+                content.push(aLabel[j].innerHTML);//获得选项
+            }
+            option_arr["opt" + i] = content;
+        }
+        storage.setItem("question",ques_arr);//storage类型只能存储字符串，非字符串的数据在存储之前会转化为字符串
+        storage.setItem("num",aDiv.length);
+        storage.setItem("option",JSON.stringify(option_arr));//对象会转化为字符串
+        storage.setItem("time",$("kalendar").value);
+    });
+    addEvent($("btn1"),"click",function(){//发布问卷
+            window.location = "index.html";
+    });
+</script>
+</html>

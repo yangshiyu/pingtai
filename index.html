@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的问卷</title>
+    <link href="top.css" rel="stylesheet" />
+    <link href="index.css" rel="stylesheet" />
+</head>
+<body>
+<div class="top">
+    <ul>
+        <li class="top1">问卷管理</li>
+        <li class="top2" id="top2"><a href="index.html">我的问卷</a></li>
+    </ul>
+</div>
+<div class="mid">
+    <table class="tab1" id="table">
+        <thead>
+        <tr class="title">
+            <td>标题</td>
+            <td>时间</td>
+            <td>状态</td>
+            <td>操作<button id="new_sur">新建问卷</button></td>
+        </tr>
+        </thead>
+    <tbody>
+        <tr class="content">
+            <td>这里是标题</td>
+            <td>2016-7-1</td>
+            <td>已结束</td>
+            <td><button>查看数据</button><button>删除问卷</button></td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+</body>
+<script type="text/javascript" src="function.js"></script>
+<script>
+    addEvent($("top2"),"mouseover",function(){
+        $("top2").style.backgroundColor="#EF7E2B";
+    });
+    addEvent($("top2"),"mouseout",function(){
+        $("top2").style.backgroundColor="#EE7419";
+    });
+    var storage=getLocalStorage();
+    if(sessionStorage.getItem("text")==undefined){
+        sessionStorage.setItem("text",$("table").innerHTML);
+    }
+    var date = new Date();
+    if (date > new Date(storage.getItem("time"))) {
+        var time = "已结束";
+    } else if (date <= new Date(storage.getItem("time"))) {
+        var time = "发布中";
+    }
+    $("table").innerHTML =  sessionStorage.getItem("text");
+    if (storage.getItem("time") != undefined) {
+        /*text += "<tr class='content'><td>" + storage.title + "</td><td>" + storage.time + "</td><td>" + time + "</td><td>" +
+                "<button class='show_chart'>查看数据</button><button class='delete'>删除问卷</button></td></tr>";*/
+        var tr=document.createElement("tr");
+        tr.className="content";
+        var td1=document.createElement("td");
+        td1.appendChild(document.createTextNode(storage.getItem("title")));
+        var td2=document.createElement("td");
+        td2.appendChild(document.createTextNode(storage.getItem("time")));
+        var td3=document.createElement("td");
+        td3.appendChild(document.createTextNode(time));
+        var td4=document.createElement("td");
+        var button1=document.createElement("button");
+        button1.className="show_chart";
+        button1.appendChild(document.createTextNode("查看数据"));
+        button1.dataset.title=storage.getItem("title");//自定义属性存放数据
+        button1.dataset.question=storage.getItem("question");
+        button1.dataset.option=storage.getItem("option");
+        var button2=document.createElement("button");
+        button2.className="deleteTr";
+        button2.appendChild(document.createTextNode("删除问卷"));
+        td4.appendChild(button1);
+        td4.appendChild(button2);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        $("table").appendChild(tr);
+        sessionStorage.setItem("text",$("table").innerHTML);
+    }
+    //删除storage中的属性值
+   storage.removeItem("time");
+    addEvent($("new_sur"),"click",function(){
+        jump("new_sur.html");
+    });
+    var aBtn1=document.getElementsByClassName("show_chart");
+    for(var j=0;j<aBtn1.length;j++) {//添加显示图表事件
+        addEvent(aBtn1[j], "click", function () {
+            storage.setItem("title",this.dataset.title);
+            storage.setItem("question",this.dataset.question);
+            storage.setItem("option",this.dataset.option);
+            window.location = "chart.html";
+        });
+    }
+     var aBtn2=document.getElementsByClassName("deleteTr");
+    for(var i=0;i<aBtn2.length;i++) {
+        addEvent(aBtn2[i], "click", function () {//添加删除事件
+            var td = this.parentNode;
+            var tr=td.parentNode;
+            tr.parentNode.removeChild(tr);
+            sessionStorage.setItem("text",$("table").innerHTML);
+        });
+    }
+
+</script>
+</html>

@@ -1,0 +1,35 @@
+
+.main{
+    width:1020px;
+    border-radius: 5px;
+    background:#ffffff;
+    margin:80px auto;
+    padding:20px;
+}
+.title{
+    width: 910px;
+    height: 40px;
+    text-align: center;
+    background-color: #FEF1E8;
+    font-size: 2rem;
+    font-size: 20px;
+    padding-top:20px;
+    margin-left: 55px;
+    margin-bottom: 20px;
+}
+.line{
+    width:950px;
+    height: 2px;
+    background-color: #CCCCCC;
+    margin: 0 35px 20px;
+}
+.back{
+    text-align: center;
+}
+.chart{
+    width: 636px;
+    height: 276px;
+    margin: 0 auto 20px;
+    border: 2px solid #CCCCCC;
+    padding:20px;
+}

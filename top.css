@@ -1,0 +1,65 @@
+*{
+    margin:0;
+    padding:0;
+}
+html{
+    font-size: 62.5%;
+}
+body{
+    background:#EEEEEE;
+    font-family:"微软雅黑","幼圆","黑体",sans-serif;
+    font-size: 1.6rem;
+}
+a{
+    text-decoration: none;
+    color:#ffffff;
+}
+.top{
+    background:#EE7419;
+    height:50px;
+    color:#ffffff;
+}
+.top li{
+    float:left;
+    list-style:none;
+    cursor:pointer;
+}
+.top1{
+    padding-top: 10px;
+    font-size: 2rem;
+    font-size: 20px;
+    margin-left:150px;
+    margin-right:30px;
+}
+.top2{
+    width:90px;
+    height:35px;
+    padding-top:15px;
+    text-align: center;
+    /*background: #ffffff;*/
+}
+button{
+    display: inline-block;
+    zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+    *display: inline;
+    width:80px;
+    height:30px;
+    color:#8896B8;
+    background-color: #ffffff;
+    vertical-align: baseline;
+    margin: 0 10px;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-size:1.4rem;
+    font-size: 14px;
+    /*padding: 5px 2em .55em;*/
+    /*text-shadow: 0 1px 1px rgba(0,0,0,.3);*/
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
